@@ -31,14 +31,22 @@ jobs:
       - name: Build React app
         run: |
           cd client
-          npm run build -- --base="/heena-portfolio/"
+          VITE_BASE=/heena-portfolio/ npm run build
         
-      - name: Move build files to root
+      - name: Prepare deployment files
         run: |
-          mkdir -p final-build
-          cp -r client/dist/* final-build/
-          echo "Final build contents:"
-          ls -la final-build/
+          if [ -d "client/dist" ]; then
+            cp -r client/dist ./deploy
+          elif [ -d "dist/public" ]; then
+            cp -r dist/public ./deploy
+          elif [ -d "dist" ]; then
+            cp -r dist ./deploy
+          else
+            echo "No build output found!"
+            exit 1
+          fi
+          echo "Deploy directory contents:"
+          ls -la deploy/
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -46,7 +54,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./final-build
+          path: ./deploy
           
       - name: Deploy to GitHub Pages
         id: deployment
