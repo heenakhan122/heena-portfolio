@@ -29,11 +29,42 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Build
-        run: npm run build
+      - name: Create GitHub Pages Vite config
+        run: |
+          cat > vite.config.github.ts << 'EOF'
+          import { defineConfig } from "vite";
+          import react from "@vitejs/plugin-react";
+          import path from "path";
+
+          export default defineConfig({
+            base: "/heena-portfolio/",
+            plugins: [react()],
+            resolve: {
+              alias: {
+                "@": path.resolve(__dirname, "client/src"),
+                "@shared": path.resolve(__dirname, "shared"),
+                "@assets": path.resolve(__dirname, "attached_assets"),
+              },
+            },
+            root: "client",
+            build: {
+              outDir: "../dist",
+              emptyOutDir: true,
+            },
+          });
+          EOF
+        
+      - name: Build for GitHub Pages
+        run: |
+          cp vite.config.github.ts vite.config.ts
+          npm run build
         
       - name: List build output
-        run: ls -la dist/
+        run: |
+          echo "Contents of dist:"
+          ls -la dist/
+          echo "First few files:"
+          find dist/ -type f | head -10
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -41,7 +72,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/public
+          path: ./dist
 
   deploy:
     environment:
