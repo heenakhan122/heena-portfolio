@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Portfolio to GitHub Pages
 
 on:
   push:
@@ -9,12 +9,11 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  build:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,58 +28,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Create GitHub Pages Vite config
+      - name: Build React app
         run: |
-          cat > vite.config.github.ts << 'EOF'
-          import { defineConfig } from "vite";
-          import react from "@vitejs/plugin-react";
-          import path from "path";
-
-          export default defineConfig({
-            base: "/heena-portfolio/",
-            plugins: [react()],
-            resolve: {
-              alias: {
-                "@": path.resolve(__dirname, "client/src"),
-                "@shared": path.resolve(__dirname, "shared"),
-                "@assets": path.resolve(__dirname, "attached_assets"),
-              },
-            },
-            root: "client",
-            build: {
-              outDir: "../dist",
-              emptyOutDir: true,
-            },
-          });
-          EOF
+          cd client
+          npm run build -- --base="/heena-portfolio/"
         
-      - name: Build for GitHub Pages
+      - name: Move build files to root
         run: |
-          cp vite.config.github.ts vite.config.ts
-          npm run build
-        
-      - name: List build output
-        run: |
-          echo "Contents of dist:"
-          ls -la dist/
-          echo "First few files:"
-          find dist/ -type f | head -10
-        
+          mkdir -p final-build
+          cp -r client/dist/* final-build/
+          echo "Final build contents:"
+          ls -la final-build/
+          
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
+          path: ./final-build
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
