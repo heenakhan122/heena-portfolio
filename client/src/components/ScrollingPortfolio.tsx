@@ -629,7 +629,7 @@ function ContactSection({ scrollToSection }: { scrollToSection?: (index: number)
 function ResumeSection({ scrollToSection }: { scrollToSection?: (index: number) => void }) {
   const downloadResume = () => {
     const link = document.createElement('a');
-    link.href = '/attached_assets/Heena Khan Resume (1)_1755311970265.pdf';
+    link.href = `${import.meta.env.BASE_URL}Heena_Khan_Resume.pdf`;
     link.download = 'Heena_Khan_Resume.pdf';
     document.body.appendChild(link);
     link.click();
