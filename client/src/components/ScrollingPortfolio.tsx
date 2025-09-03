@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import hero from "../assets/IMG_9443_1755312948262.jpg";
+
+import headshotImage from "../assets/IMG_9443_1755312948262.jpg";
 // Project images are in public folder
 const modestFilterImage = "/modestfilter-preview.webp";
 const maristanImage = "/mobile-maristan-logo.svg";
