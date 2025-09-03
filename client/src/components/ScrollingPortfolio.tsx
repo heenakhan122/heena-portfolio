@@ -32,7 +32,7 @@ import {
   SiExpress,
   SiOpencv
 } from 'react-icons/si';
-import { Database, Terminal, TestTube, BookOpen, TrendingUp, Code, Play, FileText, Cpu, Globe, Zap, Brain } from 'lucide-react';
+import { Database, Terminal, TestTube, BookOpen, TrendingUp, Code, Play, FileText, Cpu, Globe, Zap, Brain, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function ScrollingPortfolio() {
   const [activeSection, setActiveSection] = useState(0);
@@ -453,6 +453,8 @@ function WorkSection({ scrollToSection }: { scrollToSection?: (index: number) =>
 
 // Projects Section
 function ProjectsSection({ scrollToSection }: { scrollToSection?: (index: number) => void }) {
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  
   const projects = [
     {
       title: 'ModestFilter — Chrome extension (MV3) — private beta',
@@ -474,6 +476,20 @@ function ProjectsSection({ scrollToSection }: { scrollToSection?: (index: number
     }
   ];
 
+  const handlePrevious = () => {
+    setCurrentProjectIndex(prev => 
+      prev === 0 ? projects.length - 1 : prev - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentProjectIndex(prev => 
+      prev === projects.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const currentProject = projects[currentProjectIndex];
+
   return (
     <div className="max-w-6xl px-8 w-full pt-16">
       <div className="mb-12">
@@ -485,37 +501,81 @@ function ProjectsSection({ scrollToSection }: { scrollToSection?: (index: number
           Selected projects showcasing my skills in AI-powered applications, data processing, and full-stack development.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <div key={index} className="border border-terminal-green/30 rounded-lg overflow-hidden bg-terminal-bg/30 hover:border-terminal-green/50 transition-colors">
-              {project.image ? (
-                <div className="aspect-video w-full overflow-hidden">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="aspect-video w-full bg-terminal-green/10 flex items-center justify-center">
-                  <span className="text-terminal-green text-sm">Project Image</span>
-                </div>
-              )}
-              
-              <div className="p-6 space-y-4">
-                <h3 className="text-terminal-green text-xl font-semibold">{project.title}</h3>
-                <p className="text-terminal-gray text-sm leading-relaxed">{project.description}</p>
+        {/* Project Carousel */}
+        <div className="relative">
+          {/* Navigation Arrows */}
+          <button
+            onClick={handlePrevious}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-terminal-bg/80 border border-terminal-green text-terminal-green hover:bg-terminal-green hover:text-terminal-bg transition-all duration-200 p-3 rounded-full backdrop-blur-sm"
+            aria-label="Previous project"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          
+          <button
+            onClick={handleNext}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-terminal-bg/80 border border-terminal-green text-terminal-green hover:bg-terminal-green hover:text-terminal-bg transition-all duration-200 p-3 rounded-full backdrop-blur-sm"
+            aria-label="Next project"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          {/* Single Project Display */}
+          <div className="mx-16">
+            <div className="border border-terminal-green/30 rounded-lg overflow-hidden bg-terminal-bg/30 hover:border-terminal-green/50 transition-colors">
+              <div className="grid md:grid-cols-2 gap-0">
+                {/* Project Image */}
+                {currentProject.image ? (
+                  <div className="aspect-square md:aspect-auto w-full overflow-hidden">
+                    <img 
+                      src={currentProject.image} 
+                      alt={currentProject.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-square md:aspect-auto w-full bg-terminal-green/10 flex items-center justify-center">
+                    <span className="text-terminal-green text-sm">Project Image</span>
+                  </div>
+                )}
                 
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((tech, techIndex) => (
-                    <span key={techIndex} className="px-3 py-1 bg-terminal-green/20 text-terminal-green text-xs rounded-full">
-                      {tech}
-                    </span>
-                  ))}
+                {/* Project Info */}
+                <div className="p-8 space-y-6 flex flex-col justify-center">
+                  <h3 className="text-terminal-green text-2xl md:text-3xl font-semibold">{currentProject.title}</h3>
+                  <p className="text-terminal-gray leading-relaxed text-lg">{currentProject.description}</p>
+                  
+                  <div className="flex flex-wrap gap-3">
+                    {currentProject.tech.map((tech, techIndex) => (
+                      <span key={techIndex} className="px-4 py-2 bg-terminal-green/20 text-terminal-green text-sm rounded-full">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Project Counter and Dots */}
+          <div className="text-center mt-6">
+            <span className="text-terminal-gray">
+              {currentProjectIndex + 1} of {projects.length}
+            </span>
+            <div className="flex justify-center gap-2 mt-4">
+              {projects.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentProjectIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentProjectIndex 
+                      ? 'bg-terminal-green' 
+                      : 'bg-terminal-gray hover:bg-terminal-green/50'
+                  }`}
+                  aria-label={`Go to project ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
