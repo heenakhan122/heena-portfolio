@@ -1,21 +1,25 @@
+// vite.config.github.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  base: "/heena-portfolio/",
+  base: "/heena-portfolio/",            // must match repo name
   plugins: [react()],
+  root: "client",                       // your index.html is in client/
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client/src"),
+    "@": path.resolve(__dirname, "client/src"),
+    "@shared": path.resolve(__dirname, "shared"),
+    "@assets": path.resolve(__dirname, "client/src/assets"),
     },
   },
-  root: "client",
   build: {
-    outDir: "../dist",
+    outDir: path.resolve(__dirname, "dist"), // final static site
     emptyOutDir: true,
   },
 });
