@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef } from "react";
 
+import { withBase } from "@/lib/withBase";
+import { useState, useEffect, useRef } from "react";
 import headshotImage from "../assets/IMG_9443_1755312948262.jpg";
-// Project images are in public folder
-const modestFilterImage = "/modestfilter-preview.webp";
-const maristanImage = "/mobile-maristan-logo.svg";
-const khaistaImage = "/khaista-preview.png";
+
+// Use strings that point into client/public/
+const modestFilterImage = withBase("modestfilter-preview.webp");
+const maristanImage     = withBase("mobile-maristan-logo.svg");
+const khaistaImage      = withBase("khaista-preview.png");
+
+
 import { 
   SiPython, 
   SiTypescript, 
