@@ -235,20 +235,20 @@
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
+  animation: fadeInUp 0.65s ease-out forwards;
   opacity: 0;
 }
 
 .delay-200 {
-  animation-delay: 0.2s;
+  animation-delay: 0.16s;
 }
 
 .delay-400 {
-  animation-delay: 0.4s;
+  animation-delay: 0.32s;
 }
 
 .delay-600 {
-  animation-delay: 0.6s;
+  animation-delay: 0.48s;
 }
 
 /* Custom Cursor */

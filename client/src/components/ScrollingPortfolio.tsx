@@ -67,7 +67,7 @@ export default function ScrollingPortfolio() {
       setActiveSection(index);
     }
     
-    setTimeout(() => setIsScrolling(false), 1000);
+    setTimeout(() => setIsScrolling(false), 800);
   };
 
   useEffect(() => {

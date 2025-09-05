@@ -9,7 +9,7 @@ interface SkillsSectionProps {
 export default function SkillsSection({ visible, onComplete }: SkillsSectionProps) {
   useEffect(() => {
     if (visible) {
-      const timer = setTimeout(onComplete, 1500);
+      const timer = setTimeout(onComplete, 1200);
       return () => clearTimeout(timer);
     }
   }, [visible, onComplete]);

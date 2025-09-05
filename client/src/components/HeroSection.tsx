@@ -9,7 +9,7 @@ interface HeroSectionProps {
 export default function HeroSection({ visible, onComplete, onNavClick }: HeroSectionProps) {
   useEffect(() => {
     if (visible) {
-      const timer = setTimeout(onComplete, 1500);
+      const timer = setTimeout(onComplete, 1200);
       return () => clearTimeout(timer);
     }
   }, [visible, onComplete]);

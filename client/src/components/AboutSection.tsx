@@ -8,7 +8,7 @@ interface AboutSectionProps {
 export default function AboutSection({ visible, onComplete }: AboutSectionProps) {
   useEffect(() => {
     if (visible) {
-      const timer = setTimeout(onComplete, 1500);
+      const timer = setTimeout(onComplete, 1200);
       return () => clearTimeout(timer);
     }
   }, [visible, onComplete]);

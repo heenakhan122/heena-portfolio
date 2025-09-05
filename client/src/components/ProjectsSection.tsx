@@ -12,7 +12,7 @@ export default function ProjectsSection({ visible, onComplete }: ProjectsSection
 
   useEffect(() => {
     if (visible) {
-      const timer = setTimeout(onComplete, 1500);
+      const timer = setTimeout(onComplete, 1200);
       return () => clearTimeout(timer);
     }
   }, [visible, onComplete]);
